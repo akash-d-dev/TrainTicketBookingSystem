@@ -2,6 +2,7 @@ package ticket.boooking.services;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import ticket.boooking.entities.Train;
 import ticket.boooking.entities.User;
 import ticket.boooking.util.UserServiceUtil;
 
@@ -27,6 +28,15 @@ public class UserBookingService {
         loadUsers(); // Load users from file
     }
 
+    public List<Train> getTrains(String source,String  destination) throws IOException{
+        try {
+            TrainService trainService = new TrainService();
+            return trainService.searchTrains(source, destination);
+        }
+        catch (IOException ex){
+            throw new IOException("Error in fetching trains");
+        }
+    }
     public List<User> loadUsers() throws IOException {
         File users = new File(USERS_PATH);
         return objectMapper.readValue(users, new TypeReference<List<User>>() {});

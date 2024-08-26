@@ -3,17 +3,19 @@
  */
 package ticket.boooking;
 
+import ticket.boooking.entities.Train;
 import ticket.boooking.entities.User;
 import ticket.boooking.services.UserBookingService;
 import ticket.boooking.util.UserServiceUtil;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class App {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         System.out.println("Running Ticket Booking Application...");
         Scanner scanner = new Scanner(System.in);
         int option = 0;
@@ -45,6 +47,41 @@ public class App {
                     String passwordToSignUp = scanner.next();
                     User userToSignup = new User(nameToSignUp, passwordToSignUp, UserServiceUtil.hashPassword(passwordToSignUp), new ArrayList<>(), UUID.randomUUID().toString());
                     userBookingService.signUp(userToSignup);
+                    break;
+
+                case 2:
+                    System.out.println("Enter the username to login");
+                    String nameToLogin = scanner.next();
+                    System.out.println("Enter the password to login");
+                    String passwordToLogin = scanner.next();
+                    User userToLogin = new User(nameToLogin, passwordToLogin, UserServiceUtil.hashPassword(passwordToLogin), new ArrayList<>(), UUID.randomUUID().toString());
+                    try {
+                        userBookingService = new UserBookingService(userToLogin);
+                    } catch (IOException ex) {
+                        System.out.println("Failed to login");
+                        return;
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Fetching Booking...");
+                    userBookingService.fetchBooking();
+                    break;
+
+                case 4:
+                    System.out.println("Enter the source station");
+                    String source = scanner.next();
+                    System.out.println("Enter the destination station");
+                    String destination = scanner.next();
+                    List<Train> trains = userBookingService.getTrains(source, destination);
+                    int index = 1;
+                    for (Train train : trains) {
+                        System.out.println(index + "Train id : " + train.getTrainId());
+                        for(Map.Entry<String, String> entry : train.getStationTimes().entrySet()){
+                            System.out.println("Station : "+entry.getKey() + " Time : " + entry.getValue());
+                        }
+                        index++;
+                    }
                     break;
             }
         }
