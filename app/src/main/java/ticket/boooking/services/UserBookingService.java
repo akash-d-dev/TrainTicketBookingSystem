@@ -8,6 +8,7 @@ import ticket.boooking.util.UserServiceUtil;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,13 +29,13 @@ public class UserBookingService {
         loadUsers(); // Load users from file
     }
 
-    public List<Train> getTrains(String source,String  destination) throws IOException{
+    public List<Train> getTrains(String source,String  destination) {
         try {
             TrainService trainService = new TrainService();
-            return trainService.searchTrains(source, destination);
+            return trainService.searchTrains(source, destination) ;
         }
         catch (IOException ex){
-            throw new IOException("Error in fetching trains");
+            return new ArrayList<>();
         }
     }
     public List<User> loadUsers() throws IOException {

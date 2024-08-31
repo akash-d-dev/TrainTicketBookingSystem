@@ -80,8 +80,10 @@ public class App {
                         for(Map.Entry<String, String> entry : train.getStationTimes().entrySet()){
                             System.out.println("Station : "+entry.getKey() + " Time : " + entry.getValue());
                         }
-                        index++;
+//                        index++;
                     }
+                    System.out.println("Select a train by typing 1,2,3...");
+                    trainSelectedForBooking = trains.get(scanner.nextInt());
                     break;
             }
         }
